@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Déploiement UTA Workflow</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #111827;
+            color: #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+            background-color: #1f2937;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            margin: 40px 0;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+            color: #60a5fa;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 10px;
+        }
+        h3 {
+            font-size: 1.4rem;
+            margin: 25px 0 10px;
+            color: #9ca3af;
+        }
+        p, li {
+            margin-bottom: 15px;
+            color: #d1d5db;
+        }
+        code {
+            font-family: monospace;
+            background-color: #374151;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #374151;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        .method {
+            background-color: #243548;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+            border-left: 4px solid #60a5fa;
+        }
+        .tabs {
+            display: flex;
+            margin: 20px 0;
+            border-bottom: 1px solid #4b5563;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: #9ca3af;
+        }
+        .tab.active {
+            border-color: #60a5fa;
+            color: #60a5fa;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .note {
+            background-color: #2e4057;
+            border-left: 4px solid #fbbf24;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .warning {
+            background-color: #44322b;
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .version {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>UTA Workflow - Guide de déploiement</h1>
+
+        <p>
+            Ce guide vous explique comment déployer l'application UTA Workflow sur différents environnements serveurs.
+            UTA Workflow est une application Next.js complète qui nécessite un environnement spécifique pour fonctionner correctement.
+        </p>
+
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('netlify')">Netlify</div>
+            <div class="tab" onclick="showTab('docker')">Docker</div>
+            <div class="tab" onclick="showTab('server')">Serveur Dédié</div>
+        </div>
+
+        <div id="netlify" class="tab-content active">
+            <h2>Déploiement sur Netlify</h2>
+            <p>Netlify est la solution recommandée pour déployer cette application car elle offre:</p>
+            <ul>
+                <li>Une intégration native avec Next.js</li>
+                <li>Un scaling automatique</li>
+                <li>Des déploiements atomiques</li>
+                <li>CDN intégré</li>
+            </ul>
+
+            <h3>Étapes pour déployer sur Netlify</h3>
+            <ol>
+                <li>Créez un compte sur <a href="https://netlify.com" style="color: #60a5fa;">Netlify</a></li>
+                <li>Connectez votre dépôt Git ou téléchargez manuellement le dossier <code>uta-workflow</code></li>
+                <li>Configurez les paramètres de build:
+                    <ul>
+                        <li>Commande de build: <code>bun install && bun run build</code></li>
+                        <li>Répertoire de publication: <code>.next</code></li>
+                    </ul>
+                </li>
+                <li>Définissez les variables d'environnement nécessaires dans Netlify:
+                    <ul>
+                        <li><code>NODE_VERSION</code>: <code>18</code></li>
+                        <li><code>NEXT_TELEMETRY_DISABLED</code>: <code>1</code></li>
+                    </ul>
+                </li>
+                <li>Lancez le déploiement</li>
+            </ol>
+
+            <div class="note">
+                <strong>Note:</strong> Netlify détectera automatiquement que c'est une application Next.js et utilisera le plugin Netlify Next.js pour optimiser le déploiement.
+            </div>
+        </div>
+
+        <div id="docker" class="tab-content">
+            <h2>Déploiement avec Docker</h2>
+            <p>Docker offre une méthode simple et reproductible pour déployer l'application dans n'importe quel environnement compatible avec Docker.</p>
+
+            <h3>Prérequis</h3>
+            <ul>
+                <li>Docker installé sur votre machine ou serveur</li>
+                <li>Docker Compose (recommandé)</li>
+            </ul>
+
+            <h3>Étapes pour déployer avec Docker</h3>
+            <ol>
+                <li>Clonez le dépôt ou téléchargez les fichiers de l'application</li>
+                <li>Naviguez dans le répertoire <code>uta-workflow</code></li>
+                <li>Exécutez la commande:
+                    <pre><code>docker-compose up -d</code></pre>
+                </li>
+                <li>L'application sera accessible sur <code>http://localhost:3000</code></li>
+            </ol>
+
+            <h3>Fichiers Docker inclus</h3>
+            <p>L'application UTA Workflow inclut:</p>
+            <ul>
+                <li><code>Dockerfile</code> - Configuration pour construire l'image Docker</li>
+                <li><code>docker-compose.yml</code> - Configuration pour orchestrer les conteneurs</li>
+            </ul>
+
+            <div class="method">
+                <h4>Construction manuelle de l'image</h4>
+                <p>Si vous préférez construire l'image manuellement sans Docker Compose:</p>
+                <pre><code>docker build -t uta-workflow .
+docker run -p 3000:3000 uta-workflow</code></pre>
+            </div>
+        </div>
+
+        <div id="server" class="tab-content">
+            <h2>Déploiement sur un serveur dédié</h2>
+            <p>Si vous préférez héberger l'application sur votre propre serveur sans Docker:</p>
+
+            <h3>Prérequis</h3>
+            <ul>
+                <li>Node.js v18 ou supérieur</li>
+                <li>Bun (recommandé) ou npm</li>
+                <li>Git (optionnel)</li>
+            </ul>
+
+            <h3>Installation simple</h3>
+            <ol>
+                <li>Clonez le dépôt sur votre serveur ou transférez les fichiers</li>
+                <li>Naviguez dans le répertoire <code>uta-workflow</code></li>
+                <li>Utilisez le script de démarrage inclus:
+                    <pre><code>chmod +x start-local.sh
+./start-local.sh</code></pre>
+                </li>
+            </ol>
+
+            <h3>Installation avec PM2 (recommandé pour la production)</h3>
+            <p>Pour maintenir l'application en cours d'exécution après la fermeture de la session:</p>
+            <pre><code>npm install -g pm2
+cd uta-workflow
+npm install  # ou bun install
+npm run build  # ou bun run build
+pm2 start npm --name "uta-workflow" -- start
+pm2 save
+pm2 startup</code></pre>
+
+            <div class="warning">
+                <strong>Important:</strong> En production, assurez-vous de configurer les variables d'environnement appropriées, notamment <code>NODE_ENV=production</code>.
+            </div>
+        </div>
+    </div>
+
+    <div class="version">UTA Workflow v2.0 - Documentation de déploiement - Mise à jour: 3 avril 2025</div>
+
+    <script>
+        function showTab(tabId) {
+            // Hide all tab contents
+            var tabContents = document.getElementsByClassName('tab-content');
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+
+            // Deactivate all tabs
+            var tabs = document.getElementsByClassName('tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            // Show the selected tab content
+            document.getElementById(tabId).classList.add('active');
+
+            // Activate the clicked tab
+            var clickedTab = document.querySelector('.tab[onclick="showTab(\'' + tabId + '\')"]');
+            clickedTab.classList.add('active');
+        }
+    </script>
+</body>
+</html>

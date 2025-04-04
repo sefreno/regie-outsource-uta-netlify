@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  uta-workflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: uta-workflow
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    # Vous pouvez ajouter d'autres variables d'environnement selon vos besoins
+
+    # Pour la persistance des données (si nécessaire)
+    # volumes:
+    #   - ./data:/app/data
