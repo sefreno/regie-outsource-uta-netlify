@@ -1,0 +1,23 @@
+{
+  "name": "regie-outsource-uta-netlify",
+  "version": "1.0.0",
+  "description": "## Description",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sefreno/regie-outsource-uta-netlify.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sefreno/regie-outsource-uta-netlify/issues"
+  },
+  "homepage": "https://github.com/sefreno/regie-outsource-uta-netlify#readme",
+  "devDependencies": {
+    "vite": "^6.2.5"
+  }
+}
